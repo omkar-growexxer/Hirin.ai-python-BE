@@ -1,11 +1,15 @@
 from flask import Blueprint, jsonify
 from app import auth
+from app.utils.config_loader import Config
 
 api_blueprint = Blueprint('api', __name__)
 
+username = Config.get('Auth','username')
+password = Config.get('Auth','password')
+
 # Dummy data for authentication
 users = {
-    "username": "password"  # Replace this with your desired username and password
+    username : password  
 }
 
 # Define the authentication function
@@ -15,7 +19,7 @@ def verify_password(username, password):
         return username
 
 @api_blueprint.route('/protected')
-@auth.login_required  # This ensures the route is protected by basic auth
+@auth.login_required
 def protected():
     return jsonify(message="This is a protected route")
 
